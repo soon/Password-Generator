@@ -25,14 +25,14 @@ class PasswordGenerator:
         import re
 
         processed_alphabet = []
-        pattern = re.compile(r'.\-.')
+        pattern = re.compile(r'[^\\]\-.')
         for s in pattern.finditer(alphabet):
             try:
                 processed_alphabet.extend(self._generate_sequence(
                                                 s.group(0)[0], s.group(0)[2]))
             except ValueError:
-                raise ValueError('Error while processing {}'.format(s))
-        processed_alphabet.extend(pattern.sub('', alphabet))
+                raise ValueError('Error while processing {}'.format(s.group(0)))
+        processed_alphabet.extend(pattern.sub('', alphabet).replace(r'\-', '-'))
         return processed_alphabet
 
     def __init__(self, alphabet='A-Za-z0-9', length=16):
